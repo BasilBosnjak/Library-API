@@ -31,3 +31,4 @@ C:\Library-App\Library-API\obj\Debug\net8.0\refint\Library-API.dll
 C:\Library-App\Library-API\obj\Debug\net8.0\Library-API.pdb
 C:\Library-App\Library-API\obj\Debug\net8.0\Library-API.genruntimeconfig.cache
 C:\Library-App\Library-API\obj\Debug\net8.0\ref\Library-API.dll
+C:\Library-App\Library-API\obj\Debug\net8.0\Library-API.sourcelink.json
