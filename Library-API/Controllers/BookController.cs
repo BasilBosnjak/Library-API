@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Library_API.Data;
+using Library_API.Mappers;
 
 namespace Library_API.Controllers
 {
@@ -19,7 +20,8 @@ namespace Library_API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var books = _context.Books.ToList();
+            var books = _context.Books.ToList()
+            .Select(s => s.ToBookDto());
             return Ok(books);
         }
 
@@ -33,7 +35,7 @@ namespace Library_API.Controllers
                 return NotFound();
             }
 
-            return Ok(book);
+            return Ok(book.ToBookDto());
         }
     }
 }
