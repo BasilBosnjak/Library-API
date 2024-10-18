@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Library_API.Data;
 using Library_API.Mappers;
+using Library_API.Dtos.Book;
 
 namespace Library_API.Controllers
 {
@@ -36,6 +37,16 @@ namespace Library_API.Controllers
             }
 
             return Ok(book.ToBookDto());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateBookRequestDto bookDto)
+        {
+            var bookModel = bookDto.ToBookFromCreateDTO();
+            _context.Books.Add(bookModel);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetById), new { id = bookModel.Id }, bookModel.ToBookDto());
         }
     }
 }

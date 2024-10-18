@@ -20,5 +20,16 @@ namespace Library_API.Mappers
                 Year = bookModel.Year
             };
         }
+
+        public static Book ToBookFromCreateDTO(this CreateBookRequestDto bookDto)
+        {
+            return new Book
+            {
+                Title = bookDto.Title,
+                Author = bookDto.Author,
+                Genre = bookDto.Genre,
+                Year = bookDto.Year
+            };
+        }
     }
 }
