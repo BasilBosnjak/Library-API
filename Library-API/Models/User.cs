@@ -9,11 +9,6 @@ namespace Library_API.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
-
-        // Foreign key property
-        public int? BookId { get; set; }
-
-        // Navigation property
-        public Book? RentedBook { get; set; }
+        
     }
 }

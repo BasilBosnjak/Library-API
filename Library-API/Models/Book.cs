@@ -12,10 +12,5 @@ namespace Library_API.Models
         public string Author { get; set; } = String.Empty;
         public string Genre { get; set; } = String.Empty;
         public int Year { get; set; }
-
-        // Foreign key property
-        public int? UserId { get; set; }
-        // Navigation property
-        public User? User { get; set; }
     }
 }
