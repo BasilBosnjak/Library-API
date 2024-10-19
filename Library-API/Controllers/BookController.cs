@@ -48,5 +48,26 @@ namespace Library_API.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = bookModel.Id }, bookModel.ToBookDto());
         }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateBookRequestDto updateDto)
+        {
+            var bookModel = _context.Books.FirstOrDefault(x => x.Id == id);
+
+            if (bookModel == null)
+            {
+                return NotFound();
+            }
+
+            bookModel.Title = updateDto.Title;
+            bookModel.Author = updateDto.Author;
+            bookModel.Genre = updateDto.Genre;
+            bookModel.Year = updateDto.Year;
+
+            _context.SaveChanges();
+
+            return Ok(bookModel.ToBookDto());
+        }
     }
 }
