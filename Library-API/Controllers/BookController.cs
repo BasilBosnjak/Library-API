@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Library_API.Data;
 using Library_API.Mappers;
 using Library_API.Dtos.Book;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library_API.Controllers
 {
@@ -19,17 +20,17 @@ namespace Library_API.Controllers
             _context = context;  
         }
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var books = _context.Books.ToList()
-            .Select(s => s.ToBookDto());
+            var books = await _context.Books.ToListAsync();
+            var bookDto = books.Select(s => s.ToBookDto());
             return Ok(books);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var book = _context.Books.Find(id);
+            var book = await _context.Books.FindAsync(id);
 
             if (book == null)
             {
@@ -40,20 +41,20 @@ namespace Library_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateBookRequestDto bookDto)
+        public async Task<IActionResult> Create([FromBody] CreateBookRequestDto bookDto)
         {
             var bookModel = bookDto.ToBookFromCreateDTO();
-            _context.Books.Add(bookModel);
-            _context.SaveChanges();
+            await _context.Books.AddAsync(bookModel);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = bookModel.Id }, bookModel.ToBookDto());
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateBookRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateBookRequestDto updateDto)
         {
-            var bookModel = _context.Books.FirstOrDefault(x => x.Id == id);
+            var bookModel = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
 
             if (bookModel == null)
             {
@@ -65,9 +66,26 @@ namespace Library_API.Controllers
             bookModel.Genre = updateDto.Genre;
             bookModel.Year = updateDto.Year;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(bookModel.ToBookDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var bookModel = _context.Books.FirstOrDefault(x => x.Id == id);
+
+            if (bookModel == null)
+            {
+                return NotFound();
+            }
+
+            _context.Books.Remove(bookModel);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
